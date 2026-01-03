@@ -1,0 +1,172 @@
+{
+    "version": 8,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 28,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base_msvc_config",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl",
+                "CMAKE_CXX_COMPILER": "cl"
+            }
+        },
+        {
+            "name": "msvc_release",
+            "inherits": "base_msvc_config",
+            "displayName": "MSVC release configuration",
+            "description": "This build is for release builds on Windows with MSVC",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "msvc_debug",
+            "inherits": "base_msvc_config",
+            "displayName": "MSVC debug configuration",
+            "description": "This build is for debug builds on Windows with MSVC",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "base_unix_config",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build"
+        },
+        {
+            "name": "base_gcc_config",
+            "inherits": "base_unix_config",
+            "hidden": true,
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "base_clang_config",
+            "inherits": "base_unix_config",
+            "hidden": true,
+            "condition": {
+                "type": "anyOf",
+                "conditions": [
+                    {
+                        "type": "equals",
+                        "lhs": "${hostSystemName}",
+                        "rhs": "Linux"
+                    },
+                    {
+                        "type": "equals",
+                        "lhs": "${hostSystemName}",
+                        "rhs": "Darwin"
+                    }
+                ]
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "gcc_release",
+            "inherits": "base_gcc_config",
+            "displayName": "GCC release configuration",
+            "description": "This build is for release builds on Linux with GCC",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "gcc_debug",
+            "inherits": "base_gcc_config",
+            "displayName": "GCC debug configuration",
+            "description": "This build is for debug builds on Linux with GCC",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "clang_release",
+            "inherits": "base_clang_config",
+            "displayName": "Clang release configuration",
+            "description": "This build is for release builds on Linux or macOS with Clang",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "clang_debug",
+            "inherits": "base_clang_config",
+            "displayName": "Clang debug configuration",
+            "description": "This build is for debug builds on Linux or macOS with Clang",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc_release",
+            "displayName": "MSVC release build",
+            "configurePreset": "msvc_release"
+        },
+        {
+            "name": "msvc_debug",
+            "displayName": "MSVC debug build",
+            "configurePreset": "msvc_debug"
+        },
+        {
+            "name": "gcc_release",
+            "displayName": "GCC release build",
+            "configurePreset": "gcc_release"
+        },
+        {
+            "name": "gcc_debug",
+            "displayName": "GCC debug build",
+            "configurePreset": "gcc_debug"
+        },
+        {
+            "name": "clang_release",
+            "displayName": "Clang release build",
+            "configurePreset": "clang_release"
+        },
+        {
+            "name": "clang_debug",
+            "displayName": "Clang debug build",
+            "configurePreset": "clang_debug"
+        }
+    ],
+    "packagePresets": [
+        {
+            "name": "msvc_release",
+            "displayName": "MSVC build package",
+            "configurePreset": "msvc_release"
+        },
+        {
+            "name": "gcc_release",
+            "displayName": "GCC build package",
+            "configurePreset": "gcc_release"
+        },
+        {
+            "name": "clang_release",
+            "displayName": "Clang build package",
+            "configurePreset": "clang_release"
+        }
+    ]
+}
