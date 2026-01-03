@@ -16,6 +16,9 @@ jobs:
           - os: macos-15
             build_type: release
             compiler: clang
+          - os: macos-15-intel
+            build_type: release
+            compiler: clang
           - os: windows-latest
             build_type: release
             compiler: msvc
