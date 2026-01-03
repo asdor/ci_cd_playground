@@ -1,0 +1,9 @@
+#include "version.hpp"
+
+namespace example
+{
+  const char* get_version() noexcept
+  {
+    return "@EXAMPLE_VERSION@";
+  }
+}

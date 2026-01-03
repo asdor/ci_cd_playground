@@ -8,8 +8,15 @@ set(EXAMPLE_VERSION ${CMAKE_PROJECT_VERSION})
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+configure_file(src/version.cpp.in "${CMAKE_BINARY_DIR}/src/version.cpp")
+
 add_executable(${PROJECT_NAME}
     "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
+    "${CMAKE_BINARY_DIR}/src/version.cpp"
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${PROJECT_SOURCE_DIR}/src
 )
 
 target_compile_options(${PROJECT_NAME} PUBLIC
