@@ -68,14 +68,6 @@ jobs:
         - build
       name: release
       runs-on: ubuntu-latest
-      permissions:
-        contents: write
-        actions: read
-      # outputs:
-      #   version: ${{ steps.release_name.outputs.name }}
-      #   tag: ${{ github.ref_name }}
-      #   should_publish_npm: ${{ steps.npm_publish_settings.outputs.should_publish }}
-      #   npm_tag: ${{ steps.npm_publish_settings.outputs.npm_tag }}
 
       steps:
         - name: Checkout repository
@@ -91,6 +83,5 @@ jobs:
         - name: Create GitHub Release
           uses: softprops/action-gh-release@v2
           with:
-            name: example-0.1.0
+            name: example-0.2.0
             files: dist/**
-            generate_release_notes: true
