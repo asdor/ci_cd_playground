@@ -93,3 +93,4 @@ jobs:
           with:
             name: example-0.1.0
             files: dist/**
+            generate_release_notes: true
