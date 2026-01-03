@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            build_type: release
+            compiler: clang
+          - os: macos-15
+            build_type: release
+            compiler: clang
+          - os: windows-latest
+            build_type: release
+            compiler: msvc
+
+    runs-on: ${{ matrix.os }}
+    name: 'Release on ${{ matrix.os }}: ${{ matrix.compiler }} + ${{ matrix.build_type }}'
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Select CMake preset name
+        shell: bash
+        run: |
+            CMAKE_PRESET_NAME=${{ matrix.compiler }}_${{ matrix.build_type }}
+            echo "CMAKE_PRESET_NAME=$CMAKE_PRESET_NAME" >> "$GITHUB_ENV"
+
+      - name: Configure environment for Windows
+        if: matrix.os == 'windows-latest'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure environment for MacOS
+        if: matrix.os == 'macos-15'
+        run: |
+          echo "$(brew --prefix llvm@18)/bin" >> $GITHUB_PATH
+          export PATH=$(brew --prefix llvm@18)/bin:$PATH
+          export CC=$(brew --prefix llvm@18)/bin/clang
+          export CXX=$(brew --prefix llvm@18)/bin/clang++
+
+      - name: Configure CMake
+        run: cmake --preset ${{ env.CMAKE_PRESET_NAME }}
+
+      - name: Compile
+        run: cmake --build --preset ${{ env.CMAKE_PRESET_NAME }}
+
+      - name: Pack
+        run: cpack --preset ${{ env.CMAKE_PRESET_NAME }}
+
+      - name: Upload the built artifact
+        if: matrix.build_type == 'release'
+        uses: actions/upload-artifact@v6
+        with:
+          name: mswpr-${{ matrix.os }}-${{ matrix.compiler }}
+          path: |
+            build/dist/*.zip
+            build/dist/*.tar.gz
+          retention-days: 1
